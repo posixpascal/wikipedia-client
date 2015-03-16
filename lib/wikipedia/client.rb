@@ -15,13 +15,15 @@ module Wikipedia
       while follow_redirects and page.redirect?
         page = Page.new( request_page( page.redirect_title, options ) )
       end
-      parse_html(title)
+      
     end
 
     def parse_html(title)
-      return request_page(title, {
+      URI.parse(url_for({
           :action => "parse",
-      })
+          :titles => title,
+          :format => "json"
+        })).read()
     end
 
 
