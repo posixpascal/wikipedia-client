@@ -15,8 +15,15 @@ module Wikipedia
       while follow_redirects and page.redirect?
         page = Page.new( request_page( page.redirect_title, options ) )
       end
-      page
+      parse_html(title)
     end
+
+    def parse_html(title)
+      return request_page(title, {
+          :action => "parse",
+      })
+    end
+
 
     def find_image( title, options = {} )
       title = Url.new(title).title rescue title
@@ -46,7 +53,7 @@ module Wikipedia
 
     def request( options )
       require 'open-uri'
-      URI.parse( url_for( options ) ).read( "User-Agent" => "Ruby/#{RUBY_VERSION}" )
+      URI.parse( url_for( options ) ).read( "User-Agent" => "WTG API ruby/#{RUBY_VERSION} accepts/json" )
     end
 
     protected
